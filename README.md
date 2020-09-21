@@ -1,2 +1,2 @@
-# C-Practices
+# C Practices
 Some C Practices
