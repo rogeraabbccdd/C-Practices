@@ -3,6 +3,7 @@
 int sum(int number1, int number2);
 int multi(int number1, int number2);
 int gcd(int number1, int number2);
+int lcm(int number1, int number2);
 
 int main() {
   int number1;
@@ -22,6 +23,9 @@ int main() {
 
   // third queston
   printf("Answer 3: %d\n", gcd(number1, number2));
+
+  // fourth queston
+  printf("Answer 4: %d\n", lcm(number1, number2));
 
   return 0;
 }
@@ -50,6 +54,17 @@ int gcd(int number1, int number2) {
   int result;
   for(int i = 1; i <= number1 && i <= number2; i++) {
     if(number1 % i == 0 && number2 % i == 0)  result = i;
+  }
+  return result;
+}
+
+int lcm(int number1, int number2) {
+  int result = (number1 > number2) ? number1 : number2;
+  while (1) {
+    if (result % number1 == 0 && result % number2 == 0) {
+      break;
+    }
+    result++;
   }
   return result;
 }
