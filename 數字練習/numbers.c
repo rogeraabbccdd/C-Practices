@@ -28,7 +28,9 @@ int main() {
 
 int sum(int number1, int number2) {
   int result = 0;
-  for(int i = number1; i <= number2; i++) {
+  int  start =  (number1 <= number2) ? number1 : number2;
+  int end =  (number1 >= number2) ? number1 : number2;
+  for(int i = start; i <= end; i++) {
     result += i;
   }
   return result;
@@ -36,7 +38,9 @@ int sum(int number1, int number2) {
 
 int multi(int number1, int number2) {
   int result = 1;
-  for(int i = number1; i <= number2; i++) {
+  int  start =  (number1 <= number2) ? number1 : number2;
+  int end =  (number1 >= number2) ? number1 : number2;
+  for(int i = start; i <= end; i++) {
     result *= i;
   }
   return result;
