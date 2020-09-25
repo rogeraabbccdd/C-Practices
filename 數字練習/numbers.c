@@ -1,9 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int sum(int number1, int number2);
 int multi(int number1, int number2);
 int gcd(int number1, int number2);
 int lcm(int number1, int number2);
+int* odd(int number1, int number2);
 
 int main() {
   int number1;
@@ -26,6 +28,13 @@ int main() {
 
   // fourth queston
   printf("Answer 4: %d\n", lcm(number1, number2));
+
+  // fifth queston
+  int *odds = odd(number1, number2);
+  printf("Answer 5: \n");
+  for(int i=0;i<sizeof(*odds)-1;i++) {
+    printf("%d\n", odds[i]);
+  }
 
   return 0;
 }
@@ -65,6 +74,26 @@ int lcm(int number1, int number2) {
       break;
     }
     result++;
+  }
+  return result;
+}
+
+int* odd(int number1, int number2) {
+  int *result;
+
+  int start = (number1 <= number2) ? number1 : number2;
+  // if start is even, start at start + 1
+  start += !(start % 2);
+  int end =  (number1 >= number2) ? number1 : number2;
+  // if end is even, end at end - 1
+  end -= !(end % 2);
+
+  // array size
+  int size = (end - start) / 2 + 1;
+  result = malloc(size);
+
+  for (int i = 0; start <= end; ++i, start += 2) {
+    result[i] = start;
   }
   return result;
 }
