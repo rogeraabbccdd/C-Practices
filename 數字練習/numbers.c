@@ -6,6 +6,7 @@ int multi(int number1, int number2);
 int gcd(int number1, int number2);
 int lcm(int number1, int number2);
 int* odd(int number1, int number2);
+int* even(int number1, int number2);
 
 int main() {
   int number1;
@@ -34,6 +35,13 @@ int main() {
   printf("Answer 5: \n");
   for(int i=0;i<sizeof(*odds)-1;i++) {
     printf("%d\n", odds[i]);
+  }
+
+  // sixth queston
+  int *evens = even(number1, number2);
+  printf("Answer 6: \n");
+  for(int i=0;i<sizeof(*evens)-1;i++) {
+    printf("%d\n", evens[i]);
   }
 
   return 0;
@@ -87,6 +95,26 @@ int* odd(int number1, int number2) {
   int end =  (number1 >= number2) ? number1 : number2;
   // if end is even, end at end - 1
   end -= !(end % 2);
+
+  // array size
+  int size = (end - start) / 2 + 1;
+  result = malloc(size);
+
+  for (int i = 0; start <= end; ++i, start += 2) {
+    result[i] = start;
+  }
+  return result;
+}
+
+int* even(int number1, int number2) {
+  int *result;
+
+  int start = (number1 <= number2) ? number1 : number2;
+  // if start is odd, start at start + 1
+  start += start % 2;
+  int end =  (number1 >= number2) ? number1 : number2;
+  // if end is odd end, at end - 1
+  end -= end % 2;
 
   // array size
   int size = (end - start) / 2 + 1;
