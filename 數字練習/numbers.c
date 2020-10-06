@@ -93,13 +93,13 @@ int* odd(int number1, int number2, int *sz) {
   int start = (number1 <= number2) ? number1 : number2;
   // if start is even, start at start + 1
   start += !(start % 2);
-  int end =  (number1 >= number2) ? number1 : number2;
+  int end = (number1 >= number2) ? number1 : number2;
   // if end is even, end at end - 1
   end -= !(end % 2);
 
   // array size
-  *sz = (int)  (end - start) / 2 + 1;
-  result = malloc((size_t) sz);
+  *sz = (int) (end - start) / 2 + 1;
+  result = malloc(*sz*sizeof(int));
 
   for (int i = 0; start <= end; ++i, start += 2) {
     result[i] = start;
@@ -113,13 +113,13 @@ int* even(int number1, int number2, int *sz) {
   int start = (number1 <= number2) ? number1 : number2;
   // if start is odd, start at start + 1
   start += start % 2;
-  int end =  (number1 >= number2) ? number1 : number2;
+  int end = (number1 >= number2) ? number1 : number2;
   // if end is odd end, at end - 1
   end -= end % 2;
 
   // array size
   *sz = (end - start) / 2 + 1;
-  result = malloc((size_t) sz);
+  result = malloc(*sz*sizeof(int));
 
   for (int i = 0; start <= end; ++i, start += 2) {
     result[i] = start;
