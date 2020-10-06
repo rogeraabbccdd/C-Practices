@@ -5,8 +5,8 @@ int sum(int number1, int number2);
 int multi(int number1, int number2);
 int gcd(int number1, int number2);
 int lcm(int number1, int number2);
-int* odd(int number1, int number2);
-int* even(int number1, int number2);
+int* odd(int number1, int number2, int *sz);
+int* even(int number1, int number2, int *sz);
 
 int main() {
   int number1;
@@ -31,16 +31,17 @@ int main() {
   printf("Answer 4: %d\n", lcm(number1, number2));
 
   // fifth queston
-  int *odds = odd(number1, number2);
+  int size = 0;
+  int *odds = odd(number1, number2, &size);
   printf("Answer 5: \n");
-  for(int i=0;i<sizeof(*odds)-1;i++) {
+  for(int i=0;i<size;i++) {
     printf("%d\n", odds[i]);
   }
 
   // sixth queston
-  int *evens = even(number1, number2);
+  int *evens = even(number1, number2, &size);
   printf("Answer 6: \n");
-  for(int i=0;i<sizeof(*evens)-1;i++) {
+  for(int i=0;i<size;i++) {
     printf("%d\n", evens[i]);
   }
 
@@ -86,7 +87,7 @@ int lcm(int number1, int number2) {
   return result;
 }
 
-int* odd(int number1, int number2) {
+int* odd(int number1, int number2, int *sz) {
   int *result;
 
   int start = (number1 <= number2) ? number1 : number2;
@@ -97,8 +98,8 @@ int* odd(int number1, int number2) {
   end -= !(end % 2);
 
   // array size
-  int size = (end - start) / 2 + 1;
-  result = malloc(size);
+  *sz = (int)  (end - start) / 2 + 1;
+  result = malloc((size_t) sz);
 
   for (int i = 0; start <= end; ++i, start += 2) {
     result[i] = start;
@@ -106,7 +107,7 @@ int* odd(int number1, int number2) {
   return result;
 }
 
-int* even(int number1, int number2) {
+int* even(int number1, int number2, int *sz) {
   int *result;
 
   int start = (number1 <= number2) ? number1 : number2;
@@ -117,8 +118,8 @@ int* even(int number1, int number2) {
   end -= end % 2;
 
   // array size
-  int size = (end - start) / 2 + 1;
-  result = malloc(size);
+  *sz = (end - start) / 2 + 1;
+  result = malloc((size_t) sz);
 
   for (int i = 0; start <= end; ++i, start += 2) {
     result[i] = start;
