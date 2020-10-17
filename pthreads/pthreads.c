@@ -41,10 +41,18 @@ void *multi(void* data) {
 void *gcd(void* data) {
   int number1 = ((struct thread_data*) data) -> number1;
   int number2 = ((struct thread_data*) data) -> number2;
-  int result = 1;
-  for(int i = 1; i <= number1 && i <= number2; i++) {
-    if(number1 % i == 0 && number2 % i == 0)  result = i;
+
+  int result = 0;
+  if(number1 == 0 || number2 == 0) {
+    result = 0;
   }
+
+  while( number1 > 0 && number2 > 0 ) {
+    if(number1 > number2) number1 = number1 % number2;
+    else  number2 = number2 % number1;
+  }
+
+  result = number1 == 0 ? number2 : number1;
   ((struct thread_data*) data) -> result = result;
   pthread_exit(NULL);
 }
