@@ -69,11 +69,14 @@ int multi(int number1, int number2) {
 }
 
 int gcd(int number1, int number2) {
-  int result;
-  for(int i = 1; i <= number1 && i <= number2; i++) {
-    if(number1 % i == 0 && number2 % i == 0)  result = i;
+  if(number1 == 0 || number2 == 0) {
+    return 0;
   }
-  return result;
+  while( number1 > 0 && number2 > 0 ) {
+    if(number1 > number2) number1 = number1 % number2;
+    else  number2 = number2 % number1;
+  }
+  return number1 == 0 ? number2 : number1;
 }
 
 int lcm(int number1, int number2) {
