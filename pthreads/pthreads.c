@@ -8,8 +8,7 @@ struct thread_data {
   int number1;
   int number2;
   int size;
-  int result;
-  int *results;
+  long *results;
 };
 
 void *sum(void* data) {
@@ -17,24 +16,28 @@ void *sum(void* data) {
   int number2 = ((struct thread_data*) data) -> number2;
   int start = (number1 <= number2) ? number1 : number2;
   int end = (number1 >= number2) ? number1 : number2;
-  int result = 0;
+  long result = 0;
   for(int i = start; i <= end; i++) {
     result += i;
   }
-  ((struct thread_data*) data) -> result = result;
+  ((struct thread_data*) data) -> size = (int) 1;
+  ((struct thread_data*) data) -> results = malloc(((struct thread_data*) data) -> size*sizeof(long));
+  ((struct thread_data*) data) -> results[0] = result;
   pthread_exit(NULL);
 }
 
 void *multi(void* data) {
   int number1 = ((struct thread_data*) data) -> number1;
   int number2 = ((struct thread_data*) data) -> number2;
-  int result = 1;
+  long result = 1;
   int start =  (number1 <= number2) ? number1 : number2;
   int end =  (number1 >= number2) ? number1 : number2;
   for(int i = start; i <= end; i++) {
     result *= i;
   }
-  ((struct thread_data*) data) -> result = result;
+  ((struct thread_data*) data) -> size = (int) 1;
+  ((struct thread_data*) data) -> results = malloc(((struct thread_data*) data) -> size*sizeof(long));
+  ((struct thread_data*) data) -> results[0] = result;
   pthread_exit(NULL);
 }
 
@@ -42,7 +45,7 @@ void *gcd(void* data) {
   int number1 = ((struct thread_data*) data) -> number1;
   int number2 = ((struct thread_data*) data) -> number2;
 
-  int result = 0;
+  long result = 0;
   if(number1 == 0 || number2 == 0) {
     result = 0;
   }
@@ -53,21 +56,25 @@ void *gcd(void* data) {
   }
 
   result = number1 == 0 ? number2 : number1;
-  ((struct thread_data*) data) -> result = result;
+  ((struct thread_data*) data) -> size = (int) 1;
+  ((struct thread_data*) data) -> results = malloc(((struct thread_data*) data) -> size*sizeof(long));
+  ((struct thread_data*) data) -> results[0] = result;
   pthread_exit(NULL);
 }
 
 void *lcm(void* data) {
   int number1 = ((struct thread_data*) data) -> number1;
   int number2 = ((struct thread_data*) data) -> number2;
-  int result = (number1 > number2) ? number1 : number2;
+  long result = (number1 > number2) ? number1 : number2;
   while (1) {
     if (result % number1 == 0 && result % number2 == 0) {
       break;
     }
     result++;
   }
-  ((struct thread_data*) data) -> result = result;
+  ((struct thread_data*) data) -> size = (int) 1;
+  ((struct thread_data*) data) -> results = malloc(((struct thread_data*) data) -> size*sizeof(long));
+  ((struct thread_data*) data) -> results[0] = result;
   pthread_exit(NULL);
 }
 
@@ -83,7 +90,7 @@ void *odd(void* data) {
 
   // array size
   ((struct thread_data*) data) -> size = (int) (end - start) / 2 + 1;
-  ((struct thread_data*) data) -> results = malloc(((struct thread_data*) data) -> size*sizeof(int));
+  ((struct thread_data*) data) -> results = malloc(((struct thread_data*) data) -> size*sizeof(long));
 
   for (int i = 0; start <= end; ++i, start += 2) {
     ((struct thread_data*) data) -> results[i] = start;
@@ -102,7 +109,7 @@ void *even(void* data) {
 
   // array size
   ((struct thread_data*) data) -> size = (int) (end - start) / 2 + 1;
-  ((struct thread_data*) data) -> results = malloc(((struct thread_data*) data) -> size*sizeof(int));
+  ((struct thread_data*) data) -> results = malloc(((struct thread_data*) data) -> size*sizeof(long));
 
   for (int i = 0; start <= end; ++i, start += 2) {
     ((struct thread_data*) data) -> results[i] = start;
@@ -136,26 +143,26 @@ int main() {
   rc = pthread_create(&threads[5], NULL, even, (void*) &thread_array[5]); 
 
   // first question
-  printf("Answer 1: %d\n", thread_array[0].result);
+  printf("Sum: %ld\n", thread_array[0].results[0]);
 
   // second question
-  printf("Answer 2: %d\n", thread_array[1].result);
+  printf("Multi: %ld\n", thread_array[1].results[0]);
 
   // third queston
-  printf("Answer 3: %d\n", thread_array[2].result);
+  printf("GCD: %ld\n", thread_array[2].results[0]);
 
   // fourth queston
-  printf("Answer 4: %d\n", thread_array[3].result);
+  printf("LCM: %ld\n", thread_array[3].results[0]);
 
-  printf("Answer 5: \n");
+  printf("Odds: \n");
   for(int i=0;i<thread_array[4].size;i++) {
-    printf("%d\n", thread_array[4].results[i]);
+    printf("%ld\n", thread_array[4].results[i]);
   }
 
   // sixth queston
-  printf("Answer 6: \n");
+  printf("Evens: \n");
   for(int i=0;i<thread_array[5].size;i++) {
-    printf("%d\n", thread_array[5].results[i]);
+    printf("%ld\n", thread_array[5].results[i]);
   }
 
   pthread_exit(NULL);
