@@ -2,13 +2,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdbool.h>
+#include <string.h>
 
-#define NUMBERS 5000
-
-int main() {
+int main(int argc, char *argv[]) {
   double start_time, run_time, sequential_time, parallel_time;
-  int number[NUMBERS] = {0};
-  
+  int NUMBERS = atoi(argv[1]);
+  char sprint;
+  bool bprint = argc == 3 && strcmp(argv[2], "print") == 0;
+
+  int *number = malloc(sizeof(int) * NUMBERS);
 
   // Generate numbers
   printf("Generating %d random numbers...", NUMBERS);
@@ -69,10 +72,14 @@ int main() {
   printf("The Parallel time is %f\n", parallel_time);
   printf("The speedup of the program is %f\n", sequential_time / parallel_time);
 
-  printf("Sorted numbers:\n");
-  for(int i = 0; i < NUMBERS; i++ ) {
-    printf("%d ", number[i]);
+  if(bprint) {
+    printf("Sorted numbers:\n");
+    for(int i = 0; i < NUMBERS; i++ ) {
+      printf("%d ", number[i]);
+    }
   }
+
+  printf("\n");
 
   return 0;
 }
