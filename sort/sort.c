@@ -6,28 +6,25 @@
 #define NUMBERS 5000
 
 int main() {
-  clock_t start, stop;
+  double start_time, run_time, sequential_time, parallel_time;
   int number[NUMBERS] = {0};
   
 
   // Generate numbers
-  start = clock();
-  
-  printf("Generating random numbers...\n");
+  printf("Generating %d random numbers...", NUMBERS);
 
   #pragma omp parallel for
   for(int i = 0; i < NUMBERS; i++) {
     number[i] = rand();
   }
 
-  stop = clock();
+  printf("done.\n");
 
-  printf("The time to generate numbers was %f seconds\n",((double)(stop -start)/ CLOCKS_PER_SEC ));
+  // Sequntial
+  printf("Sequntial sorting numbers...");
 
-  // Sort numbers
-  start = clock();
-  printf("Sorting numbers...\n");
-  #pragma omp parallel for
+  start_time = omp_get_wtime();
+
   for(int i = 0; i < NUMBERS; i++) {
     int temp = 0;
     for(int j = i; j < NUMBERS; j++) {
@@ -38,12 +35,41 @@ int main() {
       }
     }
   }
-  stop = clock();
+  run_time = omp_get_wtime() - start_time;
+  sequential_time = run_time;
 
-  printf("The time to sort numbers was %f seconds\n",((double)(stop -start)/ CLOCKS_PER_SEC ));
+  printf("done.\n");
+
+  // Parallel
+  start_time = omp_get_wtime();
+
+  printf("Parallel sorting numbers...");
+
+  int i, j, temp = 0;
+  // static speedup: 6.x
+  // runtime speedup: > 7.5
+  #pragma omp parallel for schedule(runtime) private(temp, i, j) shared(number)
+  for(i = 0; i < NUMBERS; i++) {
+    for(j = i; j < NUMBERS; j++) {
+      if(number[j] < number[i]) {
+        temp = number[j];
+        number[j] = number[i];
+        number[i] = temp;
+      }
+    }
+  }
+
+  run_time = omp_get_wtime() - start_time;
+  parallel_time = run_time;
+
+  printf("done.\n");
+
+  // Print Results
+  printf("The Sequential time is %f\n", sequential_time);
+  printf("The Parallel time is %f\n", parallel_time);
+  printf("The speedup of the program is %f\n", sequential_time / parallel_time);
 
   printf("Sorted numbers:\n");
-  #pragma omp parallel for
   for(int i = 0; i < NUMBERS; i++ ) {
     printf("%d ", number[i]);
   }
